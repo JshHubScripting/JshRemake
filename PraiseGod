@@ -1,3 +1,44 @@
+
+-- Initialization for independent execution
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local function gs(service)
+    return game:GetService(service)
+end
+
+local players = gs("Players")
+local localplayer = players.LocalPlayer
+
+-- Ensure library exists or initialize it
+if not getgenv().library then
+    getgenv().library = {
+        windows = {},
+        theme = {},
+        options = {},
+        UpdateThemeColors = function() end, -- Placeholder for theme update logic
+        SetTheme = function(_, theme) getgenv().library.theme = theme end, -- Apply theme
+        NewWindow = function(_) return { AddTab = function(_) return { AddSection = function(_) return {} end } end } end -- GUI mock
+    }
+end
+
+
+-- Execution limiter: Allow the script to execute only 3 times
+if not getgenv().executionCount then
+    getgenv().executionCount = 0
+end
+
+getgenv().executionCount = getgenv().executionCount + 1
+
+if getgenv().executionCount > 3 then
+    warn("This script has already been executed 3 times. Further execution is not allowed.")
+    return
+end
+
+dited by xz#1111
+]]
+
 -- // Load
 
 local startupArgs = ({...})[1] or {}
@@ -1851,3 +1892,4 @@ colourSection:AddButton({
         library:SetTheme(library.themes[1].theme)
     end
 })
+
